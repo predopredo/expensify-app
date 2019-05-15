@@ -1,14 +1,18 @@
+// NPM MODULES
+import moment from 'moment';
 // ***GET VISIBLE EXPENSES***
 
 export default (expenses, { text, sortBy, startDate, endDate }) => {
+  
   return expenses.filter((expense) => {
 
-    const startDateMatch = typeof startDate !== 'number' || expense.createdAt >= startDate;
-    const endDateMatch = typeof endDate !== 'number' || expense.createdAt <= endDate;
-    const textMatch = expense.description.toLowerCase().includes(text.toLowerCase())
-
+    const createdAtMoment = moment(expense.createdAt);
+    const startDateMatch = startDate ? startDate.isSameOrBefore(moment(createdAtMoment, 'day')) : true; //moment compare functions
+    const endDateMatch = endDate ? endDate.isSameOrAfter(moment(createdAtMoment, 'day')) : true;
+    const textMatch = expense.description.toLowerCase().includes(text.toLowerCase());
+   
     return startDateMatch && endDateMatch && textMatch
-
+     
   }).sort((a, b) => {
     if (sortBy === 'date') {
       return a.createdAt < b.createdAt ? 1 : -1;
@@ -17,4 +21,5 @@ export default (expenses, { text, sortBy, startDate, endDate }) => {
       return a.amount > b.amount ? -1 : 1;
     }
   });
+
 };

@@ -30,7 +30,7 @@ class ExpenseListFilters extends React.Component {
           type="text"
           value={this.props.filters.text}
           onChange={(event) => { // 3. the new value gets passed to the value prop here (optional - in case other element changes the value)
-            dispatch(setTextFilter(event.target.value)) // 1. changes the state filter value according with user input
+            this.props.dispatch(setTextFilter(event.target.value)) // 1. changes the state filter value according with user input
           }} />
         <select
           value={this.props.filters.sortBy}
@@ -48,6 +48,9 @@ class ExpenseListFilters extends React.Component {
           onDatesChange={this.onDatesChange}
           focusedInput={this.state.calendarFocused}
           onFocusChange={this.onFocusChange}
+          showClearDates={true}
+          numberOfMonths={1}
+          isOutsideRange={() => false}
         />
       </div>
     );
