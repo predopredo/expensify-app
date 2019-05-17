@@ -4,8 +4,6 @@ import React from 'react';
 // Airbnb date picker:
 import { SingleDatePicker } from 'react-dates';
 import 'react-dates/initialize';
-// Css for date picker
-import 'react-dates/lib/css/_datepicker.css';
 
 // const now = moment();
 // console.log(now.format('MMM Do, YYYY - HH:mm'));
@@ -58,7 +56,7 @@ export default class ExpenseForm extends React.Component {
       this.setState(() => ({ error: 'Please provide description and amount!' }))
     } else {
       this.setState(() => ({ error: '' }));
-      this.props.onSubmit({
+      this.props.onSubmitToDispatch({
         description: this.state.description,
         amount: parseFloat(this.state.amount, 10) * 100,
         createdAt: this.state.createdAt.valueOf(),

@@ -4,7 +4,7 @@ import moment from 'moment';
 // react-router
 import { Link } from 'react-router-dom';
 
-const ExpenseLitItem = ({ id, description, amount, createdAt }) => (
+const ExpenseListItem = ({ id, description, amount, createdAt }) => (
   <div>
     <Link to={`/edit/${id}`}>
       <h3>{description}</h3>
@@ -13,4 +13,4 @@ const ExpenseLitItem = ({ id, description, amount, createdAt }) => (
   </div>
 );
 
-export default ExpenseLitItem;
+export default ExpenseListItem;

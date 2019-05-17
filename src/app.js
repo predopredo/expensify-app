@@ -10,6 +10,7 @@ import configureStore from './store/configureStore';
 // Styles
 import 'normalize.css/normalize.css'; //resets all css so all browsers get same styling starting point
 import './styles/styles.scss';
+import 'react-dates/lib/css/_datepicker.css';
 
 const store = configureStore();
 
