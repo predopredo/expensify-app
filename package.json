@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
+    "serve": "live-server --host=192.168.0.4 --port=3000 public/",
+    "build:dev": "webpack",
+    "build:prod": "webpack -p --env production",
     "dev-server": "webpack-dev-server --open --host 192.168.0.4",
     "test": "jest --config=jest.config.json --watchAll --runInBand"
   },
@@ -13,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "enzyme-to-json": "^3.3.5",
+    "mini-css-extract-plugin": "^0.6.0",
     "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-dates": "^20.1.0",
@@ -33,6 +36,7 @@
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.13.0",
     "jest": "^24.8.0",
+    "live-server": "^1.2.1",
     "node-sass": "^4.12.0",
     "normalize.css": "^8.0.1",
     "raf": "^3.4.1",
