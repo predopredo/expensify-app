@@ -8,13 +8,16 @@
     "build:dev": "webpack",
     "build:prod": "webpack -p --env production",
     "dev-server": "webpack-dev-server --open --host 192.168.0.4",
-    "test": "jest --config=jest.config.json --watchAll --runInBand"
+    "test": "jest --config=jest.config.json --watchAll --runInBand",
+    "start": "node server/server.js",
+    "heroku-postbuild": "npm run build:prod"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "enzyme-to-json": "^3.3.5",
+    "express": "^4.17.0",
     "mini-css-extract-plugin": "^0.6.0",
     "moment": "^2.24.0",
     "react": "^16.8.6",
