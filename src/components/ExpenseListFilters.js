@@ -8,15 +8,24 @@ import { connect } from 'react-redux';
 import { DateRangePicker } from 'react-dates';
 import 'react-dates/initialize';
 
-class ExpenseListFilters extends React.Component {
+export class ExpenseListFilters extends React.Component {
 
   state = {
     calendarFocused: null
   };
 
+  // 3. the new value gets passed to the value prop here
+  onTextChange = (event) => {
+    this.props.setTextFilter(event.target.value) // 1. changes the state filter value according with user input
+  }
+
+  onSortChange = (event) => {
+    event.target.value === 'amount' ? this.props.sortByAmount() : this.props.sortByDate();
+  };
+
   onDatesChange = ({ startDate, endDate }) => {
-    this.props.dispatch(setStartDate(startDate));
-    this.props.dispatch(setEndDate(endDate));
+    this.props.setStartDate(startDate);
+    this.props.setEndDate(endDate);
   };
 
   onFocusChange = (calendarFocused) => {
@@ -29,14 +38,10 @@ class ExpenseListFilters extends React.Component {
         <input
           type="text"
           value={this.props.filters.text}
-          onChange={(event) => { // 3. the new value gets passed to the value prop here (optional - in case other element changes the value)
-            this.props.dispatch(setTextFilter(event.target.value)) // 1. changes the state filter value according with user input
-          }} />
+          onChange={this.onTextChange} />
         <select
           value={this.props.filters.sortBy}
-          onChange={(event) => {
-            event.target.value === 'amount' ? this.props.dispatch(sortByAmount()) : this.props.dispatch(sortByDate())
-          }}>
+          onChange={this.onSortChange}>
           <option value="date">Date</option>
           <option value="amount">Amount</option>
         </select>
@@ -58,10 +63,15 @@ class ExpenseListFilters extends React.Component {
   };
 };
 
-const mapStateToProps = (storeState) => { // 2 as the value changes on the store, this re-runs and re-renders what needs to be re-rendered
-  return {
-    filters: storeState.filters
-  };
-};
+// 2 as the value changes on the store, this re-runs and re-renders what needs to be re-rendered
+const mapStateToProps = (storeState) => ({ filters: storeState.filters });
 
-export default connect(mapStateToProps)(ExpenseListFilters); // maps store states to props and adds dispatch to ExpenseListFilters
+const mapDispatchToProps = (dispatch) => ({
+  setTextFilter: (text) => dispatch(setTextFilter(text)),
+  sortByDate: () => dispatch(sortByDate()),
+  sortByAmount: () => dispatch(sortByAmount()),
+  setStartDate: (startDate) => dispatch(setStartDate(startDate)),
+  setEndDate: (endDate) => dispatch(setEndDate(endDate))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ExpenseListFilters); // maps store states to props and adds dispatch to ExpenseListFilters

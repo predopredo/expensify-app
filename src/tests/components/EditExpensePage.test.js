@@ -31,11 +31,13 @@ test('should render EditExpensePage correctly', () => {
 });
 
 test('should render NotFoundPage when no expense matched in url :id', () => {
-  wrapper = shallow(<EditExpensePage editExpense={editExpenseSpy} removeExpense={removeExpenseSpy} />);
+  wrapper.setProps({
+    expense: undefined
+  })
   expect(wrapper).toMatchSnapshot();
 });
 
-//*** FUNCTION CALLING ***
+//*** METHODS***
 test('should handle editExpense', () => {
   wrapper.find('ExpenseForm').prop('onSubmitToDispatch')(mockExpense);
   expect(editExpenseSpy).toHaveBeenLastCalledWith(mockExpense.id, mockExpense);

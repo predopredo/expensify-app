@@ -20,7 +20,7 @@ test('should render AddExpensePage correctly', () => {
   expect(wrapper).toMatchSnapshot();
 });
 
-//*** FUNCTION CALLING ***
+//*** METHODS ***
 test('should handle onSubmit', () => {
   wrapper.find('ExpenseForm').prop('onSubmitToDispatch')(expenses[1]);
   expect(historySpy.push).toHaveBeenLastCalledWith('/');
