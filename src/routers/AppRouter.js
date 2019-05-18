@@ -18,7 +18,7 @@ const AppRouter = () => (
         <Route path="/create" component={AddExpensePage} />
         <Route path="/edit/:id" component={EditExpensePage} />
         <Route path="/help" component={HelpPage} />
-        <Route component={NotFoundPage} />{/* will show when no other match is found */}
+        <Route path="*" component={NotFoundPage} />{/* will show when no other match is found */}
       </Switch>
     </div>
   </BrowserRouter>
