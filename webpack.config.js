@@ -12,7 +12,7 @@ module.exports = (env) => {
     devtool: isProduction ? 'source-map' : 'inline-source-map',
     entry: './src/app.js',
     output: {
-      path: publicPath,
+      path: path.join(publicPath, 'dist'),
       filename: 'bundle.js'
     },
     module: {
@@ -52,7 +52,8 @@ module.exports = (env) => {
     devServer: {
       contentBase: publicPath,
       port: 3000,
-      historyApiFallback: true // makes navigation work
+      historyApiFallback: true, // makes navigation work
+      publicPath: '/dist/'
     }
   };
 };
