@@ -11,6 +11,8 @@ import configureStore from './store/configureStore';
 import 'normalize.css/normalize.css'; //resets all css so all browsers get same styling starting point
 import './styles/styles.scss';
 import 'react-dates/lib/css/_datepicker.css';
+// Firebase
+import './firebase/firebase';
 
 const store = configureStore();
 

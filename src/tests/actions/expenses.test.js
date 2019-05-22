@@ -1,47 +1,84 @@
+// NPM MODULES
+import configureMockStore from 'redux-mock-store';
+import thunk from 'redux-thunk';
 // Actions
-import { addExpense, editExpense, removeExpense } from '../../actions/expenses';
+import { startAddExpense, addExpense, editExpense, removeExpense } from '../../actions/expenses';
+import expenses from '../fixtures/expenses';
+// Firebase
+import database from '../../firebase/firebase';
+
+const createMockStore = configureMockStore([thunk]);
 
 //***ADD EXPENSE***
 test('should setup add expense action Object with provided values', () => {
-  const expenseData = {
-    description: 'Rent',
-    note: "This was last month's rent",
-    amount: 109500,
-    createdAt: 1000
-  };
-
-  const action = addExpense(expenseData);
+  const action = addExpense(expenses[2]);
 
   expect(action).toEqual({
     type: 'ADD_EXPENSE',
-    expense: {
-      ...expenseData,
-      id: expect.any(String)
-    }
+    expense: expenses[2]
   });
-
-  //asserts uuid
-  expect(action.expense.id).toMatch(new RegExp(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i))
-
 });
 
-test('should setup add expense action Object with default values', () => {
-  const action = addExpense();
+//***DATABASE WRITING***
+//provided values
+test('should add expense to database and store', (done) => {
+  const store = createMockStore({});
 
-  expect(action).toEqual({
-    type: 'ADD_EXPENSE',
-    expense: {
-      description: '',
-      note: '',
-      amount: 0,
-      createdAt: 0,
-      id: expect.any(String)
-    }
-  });
+  const expenseData = {
+    description: 'Mouse',
+    amount: 3000,
+    note: 'This one is better',
+    createdAt: 1000
+  }
+
+  const actions = store.getActions(); // anytime you call actions, the function runs and you get the store actions
+
+  store.dispatch(startAddExpense(expenseData)).then((ref) => {
+    expect(actions[0]).toEqual({ // when this is called, there's an actions on store so the function gets actions[0]
+      type: 'ADD_EXPENSE',
+      expense: {
+        id: expect.any(String),
+        ...expenseData
+      }
+    });
+
+    return database.ref(`expenses/${actions[0].expense.id}`).once('value');
+  }).then((snapshot) => {
+    expect(snapshot.val()).toEqual(expenseData) // remember: id is an address. Not part of the written object
+    done(); // the test will only be finished after done() is called (if you call it up above). After then makes it asynchronous
+  });;
   
-  //asserts uuid
-  expect(action.expense.id).toMatch(new RegExp(/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i))
-  
+});
+
+//default values
+test('should add expense with defaults to database and store', (done) => {
+
+  const store = createMockStore({});
+  const expenseDefaults = {
+    description: '',
+    note: '',
+    amount: 0,
+    createdAt: 0
+  };
+
+  const actions = store.getActions(); // anytime you call actions, the function runs and you get the store actions
+
+  store.dispatch(startAddExpense({})).then((ref) => { //empty object
+
+    expect(actions[0]).toEqual({ // when this is called, there's an actions on store so the function gets actions[0]
+      type: 'ADD_EXPENSE',
+      expense: {
+        id: expect.any(String),
+        ...expenseDefaults
+      }
+    });
+
+    return database.ref(`expenses/${actions[0].expense.id}`).once('value');
+  }).then((snapshot) => {
+    expect(snapshot.val()).toEqual(expenseDefaults) // remember: id is an address. Not part of the written object
+    done(); // the test will only be finished after done() is called (if you call it up above). After then makes it asynchronous
+  });;
+
 });
 
 //***REMOVE EXPENSE***
