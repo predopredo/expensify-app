@@ -10,6 +10,15 @@ test('should setup default state', () => {
   expect(defaultState).toEqual([]);
 });
 
+//*** SET_EXPENSES ***
+test('should set expenses', () => {
+  const action = {
+    type: 'SET_EXPENSES',
+    expenses: [expenses[1]]
+  }
+  const newState = expensesReducer(expenses, action) // expenses would be the state value (entering value)
+  expect(newState).toEqual([expenses[1]]);  // should return only the expense dispatched on action (expenses[1]) (set)
+});
 //*** ADD_EXPENSE ***
 
 test('should add a new expense', () => {

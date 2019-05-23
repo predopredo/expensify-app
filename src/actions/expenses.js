@@ -15,11 +15,32 @@ import database from '../firebase/firebase';
 // component dispatches function (?)
 // function runs (has the ability to dispatch other actions and do whatever it wants)
 
-// ADD_EXPENSE
-export const addExpense = (expense) => ({
-  type: 'ADD_EXPENSE', // Action type
-  expense
+// SET_EXPENSES
+export const startSetExpenses = () => {
+  return (dispatch) => {              //this function has access to dispatch (redux-thunk)
+                                      // needs to add return so you can chain .then on app.js and render stuff
+    return database.ref('expenses').once('value').then((snapshot) => {   //reads once from firebase and then...
+      
+      const expenses = [];
+      snapshot.forEach((childSnapshot) => {            //populates the empty array
+        expenses.push({
+          id: childSnapshot.key,                       //sets firebase location (key) to id and saves it on redux store
+          ...childSnapshot.val()                       //so we can use it for routing
+        });
+
+        dispatch(setExpenses(expenses));               //dispatches the populated array with mapped ids
+      });
+    });
+
+  };
+};
+
+export const setExpenses = (expenses) => ({
+  type: 'SET_EXPENSES',
+  expenses
 });
+
+// ADD_EXPENSE
 
 // ***only works with redux-thunk wired up (on configureStore.js)***
 export const startAddExpense = (expenseData = {}) => {
@@ -41,6 +62,11 @@ export const startAddExpense = (expenseData = {}) => {
       });
   };
 };
+
+export const addExpense = (expense) => ({
+  type: 'ADD_EXPENSE', // Action type
+  expense
+});
 
 // REMOVE_EXPENSE
 export const removeExpense = ({ id } = {}) => ({
