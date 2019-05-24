@@ -7,20 +7,20 @@ import { EditExpensePage } from '../../components/EditExpensePage';
 import expenses from '../fixtures/expenses';
 
 //*** GLOBALS ***
-let editExpenseSpy, removeExpenseSpy, historySpy, wrapper;
+let editExpenseSpy, startRemoveExpenseSpy, historySpy, wrapper;
 const mockExpense = expenses[2];
 
 //*** SETTING UP TESTS ***
 beforeEach(() => {
   editExpenseSpy = jest.fn();
-  removeExpenseSpy = jest.fn();
+  startRemoveExpenseSpy = jest.fn();
   historySpy = { push: jest.fn() };
   wrapper = shallow(
     <EditExpensePage
       history={historySpy}
       expense={mockExpense}
       editExpense={editExpenseSpy}
-      removeExpense={removeExpenseSpy}
+      startRemoveExpense={startRemoveExpenseSpy}
     />
   );
 });
@@ -46,6 +46,6 @@ test('should handle editExpense', () => {
 
 test('should handle removeExpense', () => {
   wrapper.find('button').simulate('click')
-  expect(removeExpenseSpy).toHaveBeenLastCalledWith(mockExpense.id);
+  expect(startRemoveExpenseSpy).toHaveBeenLastCalledWith(mockExpense.id);
   expect(historySpy.push).toHaveBeenLastCalledWith('/')
 });
