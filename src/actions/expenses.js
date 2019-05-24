@@ -18,9 +18,9 @@ import database from '../firebase/firebase';
 // SET_EXPENSES
 export const startSetExpenses = () => {
   return (dispatch) => {              //this function has access to dispatch (redux-thunk)
-                                      // needs to add return so you can chain .then on app.js and render stuff
+    // needs to add return so you can chain .then on app.js and render stuff
     return database.ref('expenses').once('value').then((snapshot) => {   //reads once from firebase and then...
-      
+
       const expenses = [];
       snapshot.forEach((childSnapshot) => {            //populates the empty array
         expenses.push({
@@ -74,12 +74,12 @@ export const removeExpense = ({ id } = {}) => ({
   id
 });
 
-export const startRemoveExpense = ({id} = {}) => {
+export const startRemoveExpense = ({ id } = {}) => {
   return (dispatch) => {
     return database.ref(`expenses/${id}`).remove()
-    .then(() => {
-      dispatch(removeExpense({id}));
-    })
+      .then(() => {
+        dispatch(removeExpense({ id }));
+      })
   }
 }
 
@@ -89,3 +89,12 @@ export const editExpense = (id, updates) => ({
   id,
   updates
 });
+
+export const startEditExpense = (id, updates) => {
+  return (dispatch) => {
+    return database.ref(`expenses/${id}`).update(updates)
+      .then(() => {
+        dispatch(editExpense(id, updates));
+      })
+  }
+};

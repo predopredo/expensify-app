@@ -7,19 +7,19 @@ import { EditExpensePage } from '../../components/EditExpensePage';
 import expenses from '../fixtures/expenses';
 
 //*** GLOBALS ***
-let editExpenseSpy, startRemoveExpenseSpy, historySpy, wrapper;
+let startEditExpenseSpy, startRemoveExpenseSpy, historySpy, wrapper;
 const mockExpense = expenses[2];
 
 //*** SETTING UP TESTS ***
 beforeEach(() => {
-  editExpenseSpy = jest.fn();
+  startEditExpenseSpy = jest.fn();
   startRemoveExpenseSpy = jest.fn();
   historySpy = { push: jest.fn() };
   wrapper = shallow(
     <EditExpensePage
       history={historySpy}
       expense={mockExpense}
-      editExpense={editExpenseSpy}
+      startEditExpense={startEditExpenseSpy}
       startRemoveExpense={startRemoveExpenseSpy}
     />
   );
@@ -38,14 +38,15 @@ test('should render NotFoundPage when no expense matched in url :id', () => {
 });
 
 //*** METHODS***
-test('should handle editExpense', () => {
-  wrapper.find('ExpenseForm').prop('onSubmitToDispatch')(mockExpense);
-  expect(editExpenseSpy).toHaveBeenLastCalledWith(mockExpense.id, mockExpense);
-  expect(historySpy.push).toHaveBeenLastCalledWith('/')
-});
 
 test('should handle removeExpense', () => {
   wrapper.find('button').simulate('click')
   expect(startRemoveExpenseSpy).toHaveBeenLastCalledWith(mockExpense.id);
+  expect(historySpy.push).toHaveBeenLastCalledWith('/')
+});
+
+test('should handle editExpense', () => {
+  wrapper.find('ExpenseForm').prop('onSubmitToDispatch')(mockExpense);
+  expect(startEditExpenseSpy).toHaveBeenLastCalledWith(mockExpense.id, mockExpense);
   expect(historySpy.push).toHaveBeenLastCalledWith('/')
 });
