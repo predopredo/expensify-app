@@ -1,5 +1,7 @@
 // NPM MODULES
-import * as firebase from 'firebase'; // * as = all named exports
+import firebase from 'firebase/app'
+import 'firebase/auth'
+import 'firebase/database'
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,

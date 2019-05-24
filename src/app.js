@@ -23,7 +23,15 @@ const jsx = (
     <AppRouter />
   </Provider>
 );
-ReactDOM.render(<p>Loading...</p>, document.querySelector('#app'));
+
+const loading = (
+  <div>
+    <h1>Expensify</h1>
+    <p>Loading...</p>
+  </div>
+);
+
+ReactDOM.render(loading, document.querySelector('#app'));
 
 store.dispatch(startSetExpenses()).then(() => {
   ReactDOM.render(jsx, document.querySelector('#app'));
