@@ -1,5 +1,3 @@
-// NPM MODULES
-import uuid from 'uuid'
 // FIREBASE DATABASE
 import database from '../firebase/firebase';
 

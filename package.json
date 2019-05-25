@@ -7,7 +7,7 @@
     "serve": "live-server --host=192.168.0.4 --port=3000 public/",
     "build:dev": "webpack",
     "build:prod": "webpack -p --env production",
-    "dev-server": "webpack-dev-server --open --host 192.168.0.4",
+    "dev-server": "webpack-dev-server --open",
     "test": "cross-env NODE_ENV=test jest --config=jest.config.json --watchAll --runInBand",
     "start": "node server/server.js",
     "heroku-postbuild": "npm run build:prod"
@@ -24,6 +24,7 @@
     "css-loader": "^2.1.1",
     "express": "^4.17.0",
     "firebase": "^6.0.2",
+    "history": "^4.9.0",
     "mini-css-extract-plugin": "^0.6.0",
     "moment": "^2.24.0",
     "node-sass": "^4.12.0",
