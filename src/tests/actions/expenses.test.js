@@ -17,6 +17,8 @@ import expenses from '../fixtures/expenses';
 // Firebase
 import database from '../../firebase/firebase';
 
+const uid = 'thisIsMyTestUID'
+const defaultAuthState = { auth: { uid } };
 const createMockStore = configureMockStore([thunk]);
 
 
@@ -25,7 +27,7 @@ beforeEach((done) => {
   expenses.forEach(({ id, description, note, amount, createdAt }) => {
     expensesData[id] = { description, note, amount, createdAt };
   });
-  database.ref('expenses').set(expensesData).then(() => {
+  database.ref(`users/${uid}/expenses`).set(expensesData).then(() => {
     done()
   });
 });
@@ -41,7 +43,7 @@ test('should setup set expense action object with data', () => {
 });
 
 test('should fetch the expenses from firebase', (done) => {
-  const store = createMockStore({});
+  const store = createMockStore(defaultAuthState);
 
   store.dispatch(startSetExpenses()).then(() => {
     const actions = store.getActions();
@@ -68,7 +70,7 @@ test('should setup add expense action Object with provided values', () => {
 //***DATABASE WRITING***
 //provided values
 test('should add expense to database and store', (done) => {
-  const store = createMockStore({});
+  const store = createMockStore(defaultAuthState);
 
   const expenseData = {
     description: 'Mouse',
@@ -87,7 +89,7 @@ test('should add expense to database and store', (done) => {
       }
     });
 
-    return database.ref(`expenses/${actions[0].expense.id}`).once('value');
+    return database.ref(`users/${uid}/expenses/${actions[0].expense.id}`).once('value');
   }).then((snapshot) => {
     expect(snapshot.val()).toEqual(expenseData) // remember: id is an address. Not part of the written object
     done(); // the test will only be finished after done() is called (if you call it up above). After then makes it asynchronous
@@ -98,7 +100,7 @@ test('should add expense to database and store', (done) => {
 //default values
 test('should add expense with defaults to database and store', (done) => {
 
-  const store = createMockStore({});
+  const store = createMockStore(defaultAuthState);
   const expenseDefaults = {
     description: '',
     note: '',
@@ -116,7 +118,7 @@ test('should add expense with defaults to database and store', (done) => {
       }
     });
 
-    return database.ref(`expenses/${actions[0].expense.id}`).once('value');
+    return database.ref(`users/${uid}/expenses/${actions[0].expense.id}`).once('value');
   }).then((snapshot) => {
     expect(snapshot.val()).toEqual(expenseDefaults) // remember: id is an address. Not part of the written object
     done(); // the test will only be finished after done() is called (if you call it up above). After then makes it asynchronous
@@ -137,7 +139,7 @@ test('should setup remove expense action object', () => {
 
 //*** REMOVE EXPENSE FROM DATABASE ***
 test('should remove expense from database and store', (done) => {
-  const store = createMockStore({});
+  const store = createMockStore(defaultAuthState);
   const id = expenses[2].id
 
   store.dispatch(startRemoveExpense({ id }))
@@ -149,7 +151,7 @@ test('should remove expense from database and store', (done) => {
       });
     });
 
-  return database.ref(`expenses/${id}`).once('value').then((snapShot) => {
+  return database.ref(`user/${uid}/expenses/${id}`).once('value').then((snapShot) => {
     expect(snapShot.val()).toBe(null);
     done();
   })
@@ -172,8 +174,8 @@ test('should setup edit expense action object', () => {
 
 //*** EDIT EXPENSE FROM DATABASE ***
 test('should edit expense from database and store', (done) => {
-  const store = createMockStore({});
-  const id = expenses[0].id
+  const store = createMockStore(defaultAuthState);
+  const id = expenses[2].id
 
   const updates = { amount: 21045 }
 
@@ -187,7 +189,7 @@ test('should edit expense from database and store', (done) => {
       });
     });
 
-  return database.ref(`expenses/${id}`).once('value').then((snapShot) => {
+  return database.ref(`users/${uid}/expenses/${id}`).once('value').then((snapShot) => {
     expect(snapShot.val().amount).toEqual(updates.amount);
     done();
   })

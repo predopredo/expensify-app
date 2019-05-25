@@ -39,7 +39,7 @@ ReactDOM.render(<p>Loading...</p>, document.querySelector('#app'));
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
     // calling actions here because store need to be updated even when user reloads
-    store.dispatch(login(user.uid));                    
+    store.dispatch(login(user.uid));
     store.dispatch(startSetExpenses()).then(() => {
       renderApp();
       if (customHistory.location.pathname === '/') {
