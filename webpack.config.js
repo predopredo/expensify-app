@@ -7,7 +7,7 @@ const publicPath = path.join(__dirname, 'public');
 process.env.NODE_ENV = process.env.NODE_ENV || 'development' // test in test mode (as script) production for heroku(it sets it up) and development when undefined (on dev-server script)
 
 if (process.env.NODE_ENV === 'test') {
-  require('dotenv').config({path: '.env.test'}); // dotenv sets all env variables on the file here
+  require('dotenv').config({ path: '.env.test' }); // dotenv sets all env variables on the file here
 } else if (process.env.NODE_ENV === 'development') {
   require('dotenv').config({ path: '.env.development' });
 }
@@ -19,7 +19,7 @@ module.exports = (env) => {
   return {
     mode: 'development',
     devtool: isProduction ? 'source-map' : 'inline-source-map',
-    entry: './src/app.js',
+    entry: ['babel-polyfill', './src/app.js'],
     output: {
       path: path.join(publicPath, 'dist'),
       filename: 'bundle.js'
@@ -59,7 +59,7 @@ module.exports = (env) => {
       CSSExtract,
       new webpack.DefinePlugin({
         //firebase requires strings as app config values
-        'process.env.FIREBASE_API_KEY': JSON.stringify(process.env.FIREBASE_API_KEY), 
+        'process.env.FIREBASE_API_KEY': JSON.stringify(process.env.FIREBASE_API_KEY),
         'process.env.FIREBASE_AUTH_DOMAIN': JSON.stringify(process.env.FIREBASE_AUTH_DOMAIN),
         'process.env.FIREBASE_DATABASE_URL': JSON.stringify(process.env.FIREBASE_DATABASE_URL),
         'process.env.FIREBASE_PROJECT_ID': JSON.stringify(process.env.FIREBASE_PROJECT_ID),

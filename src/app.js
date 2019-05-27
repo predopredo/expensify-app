@@ -12,11 +12,12 @@ import configureStore from './store/configureStore';
 // Styles
 import 'normalize.css/normalize.css'; //resets all css so all browsers get same styling starting point
 import './styles/styles.scss';
-import 'react-dates/lib/css/_datepicker.css';
 // Set expenses from database
 import { startSetExpenses } from './actions/expenses';
 // Login and Logout actions
 import { login, logout } from './actions/auth';
+// COMPONENTS 
+import LoadingPage from './components/LoadingPage';
 
 const store = configureStore();
 
@@ -34,7 +35,7 @@ const renderApp = () => {
   }
 };
 
-ReactDOM.render(<p>Loading...</p>, document.querySelector('#app'));
+ReactDOM.render(<LoadingPage />, document.querySelector('#app'));
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {

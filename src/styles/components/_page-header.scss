@@ -1,0 +1,28 @@
+.page-header {
+  background: $off-white;
+  margin-bottom: $l-size;
+  height: 233px;
+  padding: $l-size 0;
+  @media (min-width: $desktop-breakpoint) {
+    height: 182px;
+  }
+}
+
+.page-header--no-button {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.page-header__actions {
+  margin-top: $m-size;
+}
+
+.page-header__title {
+  font-weight: 300;
+  color: $dark-grey;
+  margin: 0;
+  span {
+    font-weight: 700;
+  }
+}
